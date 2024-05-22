@@ -1,0 +1,14 @@
+
+server:
+  port: 8091
+
+spring:
+  application:
+    name: rpc-client
+
+myrpc:
+  registry:
+    address: 47.108.208.206:2181
+    root-path: /registry
+  serializer:
+    type: protostuff

@@ -15,9 +15,17 @@ public class HelloController {
     @Autowired
     private RpcProxy rpcProxy;
 
-    @GetMapping("/hello")
-    public void hello() {
-        String hello = rpcProxy.create(HelloService.class,"1.0").hello("蔡徐坤  ");
+    @GetMapping("/two")
+    public String hello() {
+        String hello = rpcProxy.create(HelloService.class,"2.0").hello("peter  ");
         System.out.println(hello);
+        return hello;
+    }
+
+    @GetMapping("/three")
+    public String hello2() {
+        String hello = rpcProxy.create(HelloService.class,"3.0").hello("3mz  ");
+        System.out.println(hello);
+        return hello;
     }
 }

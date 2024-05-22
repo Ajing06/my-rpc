@@ -2,7 +2,7 @@ package com.pai.service;
 
 import com.pai.rpc.server.RpcService;
 
-@RpcService(interfaceName = HelloService.class, serviceVersion = "1.0")
+@RpcService(interfaceName = HelloService.class, serviceVersion = "2.0")
 public class HelloServiceImpl implements HelloService {
 
 

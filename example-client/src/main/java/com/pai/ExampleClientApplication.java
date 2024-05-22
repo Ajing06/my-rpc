@@ -14,10 +14,10 @@ public class ExampleClientApplication {
         SpringApplication.run(ExampleClientApplication.class, args);
     }
 
-    @Bean
-    public ServiceDiscovery serviceDiscovery() {
-        return new ZookeeperServiceDiscovery("47.108.208.206:2181");
-    }
+//    @Bean
+//    public ServiceDiscovery serviceDiscovery() {
+//        return new ZookeeperServiceDiscovery("47.108.208.206:2181");
+//    }
 
     @Bean
     public RpcProxy rpcProxy(ServiceDiscovery serviceDiscovery) {

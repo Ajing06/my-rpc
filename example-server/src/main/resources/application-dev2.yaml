@@ -8,8 +8,9 @@ spring:
 
 myrpc:
   server:
-    address: 127.0.0.1:9000
+    address: 127.0.0.1:9001
   registry:
     address: 47.108.208.206:2181
+    root-path: /registry
   serializer:
     type: protostuff

@@ -13,7 +13,7 @@ import java.util.UUID;
 @Slf4j
 public class RpcProxy {
 
-    private ServiceDiscovery serviceDiscovery;
+    private final ServiceDiscovery serviceDiscovery;
 
     public RpcProxy(ServiceDiscovery serviceDiscovery) {
         this.serviceDiscovery = serviceDiscovery;
