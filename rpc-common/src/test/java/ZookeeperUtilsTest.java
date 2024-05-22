@@ -59,4 +59,6 @@ public class ZookeeperUtilsTest {
         String s = zooKeeperUtils.createNode("/registry/com.ikun.home", CreateMode.PERSISTENT);
         System.out.println(s);
     }
+
+
 }

@@ -7,10 +7,12 @@ import lombok.extern.slf4j.Slf4j;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Component;
 
 import java.util.UUID;
 
 @Slf4j
+@Component
 public class RpcProxy {
 
     private final ServiceDiscovery serviceDiscovery;
@@ -56,7 +58,7 @@ public class RpcProxy {
             String host = split[0];
             int port = Integer.parseInt(split[1]);
 
-            RpcClient rpcClient = new RpcClient(host, port);
+            RpcClientHandler rpcClient = new RpcClientHandler(host, port);
             RpcResponse rpcResponse = rpcClient.send(rpcRequest);
             if (rpcResponse == null) {
                 throw new RuntimeException("response is null");

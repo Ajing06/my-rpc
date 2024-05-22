@@ -15,21 +15,24 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.stereotype.Component;
 
 
 import java.util.HashMap;
 import java.util.Map;
 
 @Slf4j
+@Component
 public class RpcServer implements ApplicationContextAware, InitializingBean {
 
     private final String serviceAddress;
     private final ServiceRegistry serviceRegistry;
 
 
-    public RpcServer(String serviceAddress, ServiceRegistry serviceRegistry) {
+    public RpcServer(@Value("${myrpc.server.address}") String serviceAddress, ServiceRegistry serviceRegistry) {
         this.serviceAddress = serviceAddress;
         this.serviceRegistry = serviceRegistry;
     }

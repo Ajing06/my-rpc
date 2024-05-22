@@ -19,9 +19,9 @@ public class ExampleClientApplication {
 //        return new ZookeeperServiceDiscovery("47.108.208.206:2181");
 //    }
 
-    @Bean
-    public RpcProxy rpcProxy(ServiceDiscovery serviceDiscovery) {
-        return new RpcProxy(serviceDiscovery);
-    }
+//    @Bean
+//    public RpcProxy rpcProxy(ServiceDiscovery serviceDiscovery) {
+//        return new RpcProxy(serviceDiscovery);
+//    }
 
 }

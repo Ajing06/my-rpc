@@ -1,59 +1,55 @@
 package com.pai.rpc.client;
 
-import com.pai.rpc.code.Decoder;
-import com.pai.rpc.code.Encoder;
-import com.pai.rpc.entity.RpcRequest;
-import com.pai.rpc.entity.RpcResponse;
-import io.netty.bootstrap.Bootstrap;
-import io.netty.channel.*;
-import io.netty.channel.nio.NioEventLoopGroup;
-import io.netty.channel.socket.SocketChannel;
-import io.netty.channel.socket.nio.NioSocketChannel;
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.config.BeanPostProcessor;
+import org.springframework.stereotype.Component;
 
-public class RpcClient extends SimpleChannelInboundHandler<RpcResponse> {
+import java.lang.reflect.Field;
 
-    private String host;
-    private int port;
+/**
+ * 相当于自定义的自动依赖注入
+ */
 
-    private RpcResponse response;
+@Component
+public class RpcClient implements BeanPostProcessor {
 
-    public RpcClient(String host, int port) {
-        this.host = host;
-        this.port = port;
+    private RpcProxy rpcProxy;
+
+    public RpcClient(RpcProxy rpcProxy) {
+        this.rpcProxy = rpcProxy;
     }
+
+    /**
+     *
+     * 该方法在bean初始化之前后调用，实现自动依赖注入
+     * 具体实现：
+     *      1.获取bean的所有字段
+     *      2.判断字段是否有RpcReference注解
+     *      3.如果有，创建一个代理对象，然后注入到字段中
+     *
+     * @param bean
+     * @param beanName
+     * @return
+     * @throws BeansException
+     */
 
     @Override
-    protected void channelRead0(ChannelHandlerContext channelHandlerContext, RpcResponse o) throws Exception {
-        this.response = o;
-    }
-
-    public RpcResponse send(RpcRequest rpcRequest) throws InterruptedException {
-        NioEventLoopGroup group = new NioEventLoopGroup();
-        try {
-            Bootstrap bootstrap = new Bootstrap();
-            bootstrap.group(group)
-                    .channel(NioSocketChannel.class)
-                    .handler(new ChannelInitializer<SocketChannel>() {
-                        @Override
-                        protected void initChannel(SocketChannel socketChannel) throws Exception {
-                            socketChannel.pipeline()
-                                    .addLast(new Encoder(RpcRequest.class))
-                                    .addLast(new Decoder(RpcResponse.class))
-                                    .addLast(RpcClient.this);
-                        }
-                    });
-            bootstrap.option(ChannelOption.TCP_NODELAY, true);
-            ChannelFuture future = bootstrap.connect(host, port).sync();
-
-            future.channel().writeAndFlush(rpcRequest).sync();
-
-            future.channel().closeFuture().sync();
-
-            return response;
-        } finally {
-            group.shutdownGracefully();
+    public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
+        Class<?> beanClass = bean.getClass();
+        Field[] declaredFields = beanClass.getDeclaredFields();
+        for (Field field : declaredFields) {
+            RpcReference rpcReference = field.getAnnotation(RpcReference.class);
+            if (rpcReference!=null) {
+                String version = rpcReference.version();
+                Object objectProxy = rpcProxy.create(field.getType(), version);
+                field.setAccessible(true);
+                try {
+                    field.set(bean, objectProxy);
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+            }
         }
+        return bean;
     }
-
-
 }
