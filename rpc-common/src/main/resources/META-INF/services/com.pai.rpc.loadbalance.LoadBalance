@@ -1,0 +1,3 @@
+com.pai.rpc.loadbalance.impl.ConsistentHashLoadBalance
+com.pai.rpc.loadbalance.impl.RoundRobinLoadBalance
+com.pai.rpc.loadbalance.impl.RandomLoadBalance
