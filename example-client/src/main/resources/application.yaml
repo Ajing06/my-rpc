@@ -12,3 +12,6 @@ myrpc:
     root-path: /registry
   serializer:
     type: protostuff
+  loadbalance:
+    type: com.pai.rpc.loadbalance.impl.ConsistentHashLoadBalance
+    #type: com.pai.rpc.loadbalance.impl.RoundRobinLoadBalance

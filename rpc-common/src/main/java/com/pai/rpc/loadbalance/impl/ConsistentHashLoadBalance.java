@@ -2,8 +2,8 @@ package com.pai.rpc.loadbalance.impl;
 
 import com.pai.rpc.entity.RpcRequest;
 import com.pai.rpc.loadbalance.AbstractLoadBalance;
+import lombok.extern.slf4j.Slf4j;
 
-import java.lang.reflect.Array;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -12,20 +12,27 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Stream;
 
-public class ConsistentLoadBalance extends AbstractLoadBalance {
+@Slf4j
+public class ConsistentHashLoadBalance extends AbstractLoadBalance {
 
     private final ConcurrentHashMap<String, ConsistentHashSelector> selectors = new ConcurrentHashMap<>();
     @Override
     protected String doSelect(List<String> serviceUrlList, RpcRequest rpcRequest) {
         String serviceName = rpcRequest.getInterfaceName() + rpcRequest.getServiceVersion();
-        int identityHashCode = System.identityHashCode(serviceUrlList);
+        //int identityHashCode = System.identityHashCode(serviceUrlList);
+        int identityHashCode = serviceUrlList.hashCode();
         ConsistentHashSelector selector = selectors.get(serviceName);
         if(selector == null || selector.identityHashCode != identityHashCode) {
             selectors.put(serviceName, new ConsistentHashSelector(serviceUrlList, identityHashCode, 160));
             selector = selectors.get(serviceName);
         }
-        return selector.select(serviceName + Arrays.stream(rpcRequest.getParameters()));
+        //return selector.select(serviceName );
+        //Stream<Object> stream = Arrays.stream(rpcRequest.getParameters());
+        String key = serviceName + rpcRequest.parametersToString();
+        log.info("key: {}", key);
+        return selector.select(key);
     }
 
     /**

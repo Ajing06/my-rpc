@@ -41,13 +41,12 @@ public class RpcProxy {
             String serviceAddress = null;
 
             if(serviceDiscovery != null) {
-                String serviceName = clazz.getName();
-                if(StringUtils.isNotBlank(serviceVersion)) {
-                    serviceName += "-" + serviceVersion.trim();
-                }
+//                String serviceName = clazz.getName();
+//                if(StringUtils.isNotBlank(serviceVersion)) {
+//                    serviceName += "-" + serviceVersion.trim();
+//                }
+                serviceAddress = serviceDiscovery.discovery(rpcRequest);
 
-                serviceAddress = serviceDiscovery.discovery(serviceName);
-                log.info("discover service: {} from {}", serviceName, serviceAddress);
             }
 
             if (StringUtils.isBlank(serviceAddress)) {

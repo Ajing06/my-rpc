@@ -30,7 +30,6 @@ public class SerializerConfig {
         } else {
             throw new IllegalArgumentException("Unsupported serializer type : " + serializerType + "!");
         }
-
     }
 
 }

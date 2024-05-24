@@ -74,7 +74,7 @@ public class RpcServer implements ApplicationContextAware, InitializingBean {
                             socketChannel.pipeline()
                                     .addLast(new Encoder(RpcResponse.class))
                                     .addLast(new Decoder(RpcRequest.class))
-                                    .addLast(new RpcServerHandler(handlerMap));
+                                    .addLast(new RpcServerHandler(handlerMap));  // 自定义的处理器,handlerMap中存放了服务名和服务对象的映射
                         }
                     });
             String[] split = serviceAddress.split(":");

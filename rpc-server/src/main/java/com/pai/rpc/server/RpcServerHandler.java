@@ -12,7 +12,8 @@ import java.util.Map;
 
 public class RpcServerHandler extends SimpleChannelInboundHandler<RpcRequest> {
 
-    private Map<String, Object> handlerMap;
+    // 服务名和服务对象的映射
+    private final Map<String, Object> handlerMap;
 
     public RpcServerHandler(Map<String, Object> handlerMap) {
         this.handlerMap = handlerMap;
@@ -49,7 +50,7 @@ public class RpcServerHandler extends SimpleChannelInboundHandler<RpcRequest> {
         if (serviceBean == null) {
             throw new RuntimeException(String.format("can not find service bean by key: %s", interfaceName));
         }
-        // 2、反射调用方法
+        // 2、反射调用方法，返回执行结果
         Class<?> clazz = serviceBean.getClass();
         String methodName = request.getMethodName();
         Class<?>[] parameterTypes = request.getParameterTypes();
